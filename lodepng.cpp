@@ -1,3 +1,5 @@
+// clang-format off
+
 /*
 LodePNG version 20220717
 
@@ -119,7 +121,7 @@ to something as fast. */
 
 static void lodepng_memcpy(void* LODEPNG_RESTRICT dst,
                            const void* LODEPNG_RESTRICT src, size_t size) {
-  size_t i;
+  volatile size_t i;
   for(i = 0; i < size; i++) ((char*)dst)[i] = ((const char*)src)[i];
 }
 
@@ -324,7 +326,7 @@ static char* alloc_string(const char* in) {
 /* ////////////////////////////////////////////////////////////////////////// */
 
 #if defined(LODEPNG_COMPILE_DECODER) || defined(LODEPNG_COMPILE_PNG)
-static unsigned lodepng_read32bitInt(const unsigned char* buffer) {
+static unsigned lodepng_read32bitInt(const volatile unsigned char* buffer) {
   return (((unsigned)buffer[0] << 24u) | ((unsigned)buffer[1] << 16u) |
          ((unsigned)buffer[2] << 8u) | (unsigned)buffer[3]);
 }
@@ -2412,8 +2414,8 @@ static unsigned lodepng_crc32_table[256] = {
 
 /*Return the CRC of the bytes buf[0..len-1].*/
 unsigned lodepng_crc32(const unsigned char* data, size_t length) {
-  unsigned r = 0xffffffffu;
-  size_t i;
+  volatile unsigned r = 0xffffffffu;
+  volatile size_t i;
   for(i = 0; i < length; ++i) {
     r = lodepng_crc32_table[(r ^ data[i]) & 0xffu] ^ (r >> 8u);
   }
