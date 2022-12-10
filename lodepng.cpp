@@ -4098,7 +4098,7 @@ unsigned lodepng_inspect(unsigned* w, unsigned* h, LodePNGState* state,
   return state->error;
 }
 
-static unsigned unfilterScanline(unsigned char* recon, const unsigned char* scanline, const unsigned char* precon,
+static unsigned unfilterScanline(volatile unsigned char* recon, const volatile unsigned char* scanline, const volatile unsigned char* precon,
                                  size_t bytewidth, unsigned char filterType, size_t length) {
   /*
   For PNG filter method 0
